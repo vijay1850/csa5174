@@ -1,0 +1,76 @@
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h>
+
+// Function to encrypt a message using the polyalphabetic substitution cipher
+void polyalphabeticEncrypt(char message[], char key[]) {
+    int messageLen = strlen(message), keyLen = strlen(key), i, j;
+    char encryptedMessage[messageLen];
+
+    for (i = 0, j = 0; i < messageLen; ++i, ++j) {
+        if (j == keyLen)
+            j = 0;
+
+        char shift = toupper(key[j]) - 'A';
+
+        if (isalpha(message[i])) {
+            if (islower(message[i])) {
+                encryptedMessage[i] = 'a' + (message[i] - 'a' + shift) % 26;
+            } else {
+                encryptedMessage[i] = 'A' + (message[i] - 'A' + shift) % 26;
+            }
+        } else {
+            encryptedMessage[i] = message[i];
+        }
+    }
+    encryptedMessage[i] = '\0';
+
+    printf("Encrypted message: %s\n", encryptedMessage);
+}
+
+// Function to decrypt a message using the polyalphabetic substitution cipher
+void polyalphabeticDecrypt(char message[], char key[]) {
+    int messageLen = strlen(message), keyLen = strlen(key), i, j;
+    char decryptedMessage[messageLen];
+
+    for (i = 0, j = 0; i < messageLen; ++i, ++j) {
+        if (j == keyLen)
+            j = 0;
+
+        char shift = toupper(key[j]) - 'A';
+
+        if (isalpha(message[i])) {
+            if (islower(message[i])) {
+                decryptedMessage[i] = 'a' + (message[i] - 'a' - shift + 26) % 26;
+            } else {
+                decryptedMessage[i] = 'A' + (message[i] - 'A' - shift + 26) % 26;
+            }
+        } else {
+            decryptedMessage[i] = message[i];
+        }
+    }
+    decryptedMessage[i] = '\0';
+
+    printf("Decrypted message: %s\n", decryptedMessage);
+}
+
+int main() {
+    char message[1000], key[100];
+
+    printf("Enter a message to encrypt: ");
+    fgets(message, sizeof(message), stdin);
+    message[strcspn(message, "\n")] = '\0'; // Remove newline character
+
+    printf("Enter a key: ");
+    fgets(key, sizeof(key), stdin);
+    key[strcspn(key, "\n")] = '\0'; // Remove newline character
+
+    printf("Original message: %s\n", message);
+    printf("Key: %s\n", key);
+
+    polyalphabeticEncrypt(message, key);
+    polyalphabeticDecrypt(message, key);
+
+    return 0;
+}
+

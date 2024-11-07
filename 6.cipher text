@@ -1,0 +1,34 @@
+#include <stdio.h>
+#include <string.h>
+
+int main() {
+    char message[1000];
+    int a, b;
+
+    printf("Enter a message to encrypt: ");
+    fgets(message, sizeof(message), stdin);
+    message[strcspn(message, "\n")] = '\0'; // Remove newline character
+
+    printf("Enter the value of 'a' for the affine cipher (must be coprime with 26): ");
+    scanf("%d", &a);
+
+    printf("Enter the value of 'b' for the affine cipher: ");
+    scanf("%d", &b);
+
+    printf("Original message: %s\n", message);
+    printf("Key: a = %d, b = %d\n", a, b);
+
+    // Encrypt the message using the affine cipher
+    for (int i = 0; i < strlen(message); i++) {
+        if (message[i] == ' ')
+            continue;
+
+        // Apply the affine cipher formula: C = (a * P + b) mod 26
+        message[i] = ((a * (message[i] - 'A') + b) % 26) + 'A';
+    }
+
+    printf("Encrypted message: %s\n", message);
+
+    return 0;
+}
+
